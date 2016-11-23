@@ -9,21 +9,30 @@
  */
 
 var fs = require('fs');
+
 var Promise = require('bluebird');
 var promiseFunctions = require('./promiseConstructor.js');
 var GitHubFunctions = require('./promisification.js');
-
+var getGitHubProfileAsync = require('./promisification').getGitHubProfileAsync;
+var writeFileAsync = Promise.promisify(fs.writeFile);
 
 var fetchProfileAndWriteToFile = function(readFilePath, writeFilePath) {
   // TODO
+  // return promiseFunctions.pluckFirstLineFromFileAsync(readFilePath)
+  // .then(function(username) {
+  //   // console.log(username);
+  //   return GitHubFunctions.getGitHubProfileAsync(username);
+  // })
+  // .then(function(info) {
+  //   return fs.writeFileAsync(writeFilePath, JSON.stringify(info));
+  // });
+
   return promiseFunctions.pluckFirstLineFromFileAsync(readFilePath)
-  .then(function(username) {
-    // console.log(username);
-    return GitHubFunctions.getGitHubProfileAsync(username);
-  })
-  .then(function(info) {
-    fs.writeFileSync(writeFilePath, JSON.stringify(info));
-  });
+    .then(GitHubFunctions.getGitHubProfileAsync)
+    .then(function(profile) {
+      return writeFileAsync(writeFilePath, JSON.stringify(profile));
+    });
+
   // .then(function(info) {
   //   // console.log(info);
   //   return new Promise(function(resolve, reject) {
