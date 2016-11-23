@@ -18,6 +18,7 @@ describe('Callback review', function() {
 
     it('should invoke the callback with an error as the first argument', function(done) {
       pluckFirstLineFromFile(__dirname + '/../files/nonexistent_file.txt', function(err, firstLine) {
+        console.log(firstLine);
         expect(err.code).to.equal('ENOENT');
         expect(firstLine).to.not.exist;
         done();
@@ -26,6 +27,8 @@ describe('Callback review', function() {
 
     it('should invoke the callback with the first line as the second argument', function(done) {
       pluckFirstLineFromFile(__dirname + '/../files/file_to_read.txt', function(err, firstLine) {
+        console.log(firstLine);
+
         expect(firstLine).to.equal('This is a file to read');
         expect(err).to.not.exist;
         done();
